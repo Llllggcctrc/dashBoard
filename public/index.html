@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="pt-BR">/
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#07121c">
+    <meta name="description" content="Dashboard interativo para explorar vendas, categorias e regiões.">
+    <title>Visão de vendas | Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <div class="boot-splash" id="boot-splash" role="region" aria-label="Abertura animada">
+      <div class="boot-particles" aria-hidden="true">
+        <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+      </div>
+      <div class="boot-scanline" aria-hidden="true"></div>
+      <div class="boot-content" aria-hidden="true">
+        <div class="boot-emblem"><span>N</span><i></i></div>
+        <p class="boot-kicker">NEXUS <span>///</span> DATA SYSTEM</p>
+        <strong>Preparando sua visão de vendas</strong>
+        <div class="boot-progress"><i></i></div>
+        <small>INICIALIZANDO PAINEL <b>01 / 03</b></small>
+      </div>
+      <button class="skip-intro" id="skip-intro" type="button" aria-label="Pular animação de abertura">
+        Pular intro <kbd>ESC</kbd>
+      </button>
+    </div>
+    <main class="page-shell">
+      <header class="page-header">
+        <div class="brand-mark" aria-hidden="true">N</div>
+        <div class="header-copy">
+          <p class="eyebrow">FUNDAMENTOS DE IA E ANÁLISE DE DADOS</p>
+          <div class="title-line"><h1>Visão de vendas</h1><span class="system-chip">SALES INTELLIGENCE <b>01</b></span></div>
+          <p class="page-intro">Explore o desempenho das vendas e compare os resultados por período, categoria e região.</p>
+        </div>
+        <div class="header-actions">
+          <button class="button button-secondary" id="import-button" type="button" aria-label="Importar uma base de vendas CSV">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 13V3m0 0L6.5 6.5M10 3l3.5 3.5M4 12.5V16h12v-3.5"/></svg>
+            Importar CSV
+          </button>
+          <input id="csv-file" type="file" accept=".csv,text/csv" hidden>
+          <button class="button button-primary" id="export-button" type="button" aria-label="Exportar os dados filtrados em CSV">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 3v10m0 0 3.5-3.5M10 13l-3.5-3.5M4 13.5V17h12v-3.5"/></svg>
+            Exportar dados
+          </button>
+        </div>
+      </header>
+
+      <section class="source-banner" aria-live="polite">
+        <span class="source-dot" aria-hidden="true"></span>
+        <span id="source-message">Demonstração com dados fictícios · 200 vendas entre jan. e dez. de 2025</span>
+        <span class="source-spacer"></span>
+        <span class="source-hint">Os arquivos importados são processados somente neste navegador.</span>
+      </section>
+
+      <section class="panel filters-panel" aria-labelledby="filters-title">
+        <div class="section-heading filter-heading">
+          <div>
+            <p class="eyebrow">PERSONALIZE A ANÁLISE</p>
+            <h2 id="filters-title">Filtros</h2>
+          </div>
+          <button class="text-button" id="clear-filters" type="button">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 6h12M8 6V4h4v2m2 0-.6 10H6.6L6 6"/></svg>
+            Limpar filtros
+          </button>
+        </div>
+        <div class="filters-grid">
+          <label class="field-group" for="date-start">
+            <span>Período inicial</span>
+            <input id="date-start" type="date">
+          </label>
+          <label class="field-group" for="date-end">
+            <span>Período final</span>
+            <input id="date-end" type="date">
+          </label>
+          <label class="field-group" for="category-filter">
+            <span>Categoria</span>
+            <select id="category-filter"><option value="">Todas as categorias</option></select>
+          </label>
+          <label class="field-group" for="region-filter">
+            <span>Região</span>
+            <select id="region-filter"><option value="">Todas as regiões</option></select>
+          </label>
+        </div>
+        <p class="filter-note" id="filter-note">Os filtros atualizam os indicadores, os gráficos e a tabela.</p>
+      </section>
+
+      <section class="metrics-grid" aria-label="Indicadores das vendas filtradas">
+        <article class="metric-card metric-revenue">
+          <div class="metric-top"><span>Faturamento total</span><span class="metric-icon icon-blue" aria-hidden="true">R$</span></div>
+          <strong id="metric-revenue">R$ 0,00</strong>
+          <small>Receita das vendas exibidas</small>
+        </article>
+        <article class="metric-card">
+          <div class="metric-top"><span>Quantidade de vendas</span><span class="metric-icon icon-green" aria-hidden="true"><svg viewBox="0 0 20 20"><path d="M4 5h12v12H4zM7 3v4m6-4v4M4 9h12"/></svg></span></div>
+          <strong id="metric-sales">0</strong>
+          <small>Identificadores únicos</small>
+        </article>
+        <article class="metric-card">
+          <div class="metric-top"><span>Unidades vendidas</span><span class="metric-icon icon-mint" aria-hidden="true"><svg viewBox="0 0 20 20"><path d="m10 2 7 4v8l-7 4-7-4V6l7-4Zm-7 4 7 4 7-4m-7 4v8"/></svg></span></div>
+          <strong id="metric-units">0</strong>
+          <small>Soma das quantidades</small>
+        </article>
+        <article class="metric-card">
+          <div class="metric-top"><span>Ticket médio</span><span class="metric-icon icon-sand" aria-hidden="true"><svg viewBox="0 0 20 20"><path d="M10 2v16m4-12c-.5-1-1.6-1.5-3.5-1.5-2 0-3.5 1-3.5 2.5 0 4 7 1.5 7 5 0 1.7-1.5 3-4 3-1.8 0-3.2-.6-4-1.8"/></svg></span></div>
+          <strong id="metric-average">R$ 0,00</strong>
+          <small>Faturamento por venda</small>
+        </article>
+      </section>
+
+      <section class="charts-grid" aria-label="Gráficos de vendas">
+        <article class="panel chart-panel chart-wide">
+          <div class="section-heading chart-heading">
+            <div><p class="eyebrow">TENDÊNCIA</p><h2>Faturamento mensal</h2></div>
+            <span class="chart-legend"><i aria-hidden="true"></i> Faturamento</span>
+          </div>
+          <div class="chart-wrap chart-line-wrap"><canvas id="monthly-chart" role="img" aria-label="Gráfico de linha do faturamento mensal"></canvas></div>
+        </article>
+        <article class="panel chart-panel">
+          <div class="section-heading chart-heading">
+            <div><p class="eyebrow">COMPOSIÇÃO</p><h2>Receita por categoria</h2></div>
+          </div>
+          <div class="chart-wrap"><canvas id="category-chart" role="img" aria-label="Gráfico de barras do faturamento por categoria"></canvas></div>
+        </article>
+        <article class="panel chart-panel chart-wide region-panel">
+          <div class="section-heading chart-heading">
+            <div><p class="eyebrow">DISTRIBUIÇÃO</p><h2>Faturamento por região</h2></div>
+          </div>
+          <div class="chart-wrap chart-region-wrap"><canvas id="region-chart" role="img" aria-label="Gráfico de barras do faturamento por região"></canvas></div>
+          <p class="chart-footnote" id="region-note" hidden></p>
+        </article>
+      </section>
+
+      <section class="panel table-panel" aria-labelledby="table-title">
+        <div class="section-heading table-heading">
+          <div><p class="eyebrow">DETALHAMENTO</p><h2 id="table-title">Vendas</h2></div>
+          <label class="search-field" for="table-search">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.7" cy="8.7" r="5.7"/><path d="m13 13 4 4"/></svg>
+            <input id="table-search" type="search" placeholder="Pesquisar vendas" autocomplete="off">
+          </label>
+        </div>
+        <div class="table-meta"><span id="row-count" aria-live="polite">0 registros exibidos</span><span id="invalid-count" class="invalid-count"></span></div>
+        <div class="table-scroll">
+          <table>
+            <thead><tr>
+              <th scope="col"><button type="button" data-sort="id_venda">ID venda <span aria-hidden="true">↕</span></button></th>
+              <th scope="col"><button type="button" data-sort="data">Data <span aria-hidden="true">↕</span></button></th>
+              <th scope="col"><button type="button" data-sort="produto">Produto <span aria-hidden="true">↕</span></button></th>
+              <th scope="col"><button type="button" data-sort="categoria">Categoria <span aria-hidden="true">↕</span></button></th>
+              <th scope="col"><button type="button" data-sort="regiao">Região <span aria-hidden="true">↕</span></button></th>
+              <th scope="col" class="numeric"><button type="button" data-sort="quantidade">Unidades <span aria-hidden="true">↕</span></button></th>
+              <th scope="col" class="numeric"><button type="button" data-sort="preco_unitario">Preço un. <span aria-hidden="true">↕</span></button></th>
+              <th scope="col" class="numeric"><button type="button" data-sort="faturamento">Faturamento <span aria-hidden="true">↕</span></button></th>
+            </tr></thead>
+            <tbody id="sales-table-body"></tbody>
+          </table>
+          <div class="empty-state" id="empty-state" hidden>
+            <span aria-hidden="true">⌕</span>
+            <strong>Nenhuma venda encontrada</strong>
+            <p>Ajuste os filtros ou a pesquisa para ver resultados.</p>
+          </div>
+        </div>
+        <div class="table-footer"><span>Faturamento por linha = quantidade × preço unitário</span><span>Valores em reais (R$)</span></div>
+      </section>
+
+      <footer class="page-footer">
+        <span>Dashboard de análise exploratória de vendas</span>
+        <span id="data-quality-note">Os dados demonstrativos são fictícios.</span>
+      </footer>
+    </main>
+    <script src="script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+  </body>
+</html>
